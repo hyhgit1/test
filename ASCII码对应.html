@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<!-- saved from url=(0051)https://www.cnblogs.com/fishparadise/p/4570654.html -->
+<html lang="zh-cn"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>字符串中的不可见字符应该如何清除？ - FishParadise - 博客园</title>
+<link type="text/css" rel="stylesheet" href="./ASCII码对应_files/blog-common.css">
+<link id="MainCss" type="text/css" rel="stylesheet" href="./ASCII码对应_files/bundle-darkgreentrip.css">
+<link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="./ASCII码对应_files/bundle-darkgreentrip-mobile.css">
+<link title="RSS" type="application/rss+xml" rel="alternate" href="http://www.cnblogs.com/fishparadise/rss">
+<link title="RSD" type="application/rsd+xml" rel="EditURI" href="http://www.cnblogs.com/fishparadise/rsd.xml">
+<link type="application/wlwmanifest+xml" rel="wlwmanifest" href="http://www.cnblogs.com/fishparadise/wlwmanifest.xml">
+<script async="" src="./ASCII码对应_files/analytics.js.下载"></script><script type="text/javascript" src="./ASCII码对应_files/encoder.js.下载"></script><script src="./ASCII码对应_files/jquery-2.2.0.min.js.下载"></script>
+<script type="text/javascript">var currentBlogApp = 'fishparadise', cb_enable_mathjax=false;var isLogined=false;</script>
+<script src="./ASCII码对应_files/blog-common.js.下载" type="text/javascript"></script>
+</head>
+<body>
+<a name="top"></a>
+
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+	<a id="lnkBlogLogo" href="http://www.cnblogs.com/fishparadise/"><img id="blogLogo" src="./ASCII码对应_files/logo.gif" alt="返回主页"></a>			
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle" href="http://www.cnblogs.com/fishparadise/">FishParadise</a></h1>
+<h2></h2>
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="http://www.cnblogs.com/">博客园</a></li>
+<li><a id="blog_nav_myhome" class="menu" href="http://www.cnblogs.com/fishparadise/">首页</a></li>
+<li><a id="blog_nav_newpost" class="menu" rel="nofollow" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">新随笔</a></li>
+<li><a id="blog_nav_contact" class="menu" rel="nofollow" href="https://msg.cnblogs.com/send/FishParadise">联系</a></li>
+<li><a id="blog_nav_rss" class="menu" href="http://www.cnblogs.com/fishparadise/rss">订阅</a>
+<!--<a id="blog_nav_rss_image" class="aHeaderXML" href="http://www.cnblogs.com/fishparadise/rss"><img src="//www.cnblogs.com/images/xml.gif" alt="订阅" /></a>--></li>
+<li><a id="blog_nav_admin" class="menu" rel="nofollow" href="https://i.cnblogs.com/">管理</a></li>
+</ul>
+		<div class="blogStats">
+			
+			<div id="blog_stats">
+<span id="stats_post_count">随笔 - 31&nbsp; </span>
+<span id="stats_article_count">文章 - 0&nbsp; </span>
+<span id="stats-comment_count">评论 - 72</span>
+</div>
+			
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		
+<div id="post_detail">
+<!--done-->
+<div id="topics">
+	<div class="post">
+		<h1 class="postTitle">
+			<a id="cb_post_title_url" class="postTitle2" href="http://www.cnblogs.com/fishparadise/p/4570654.html">字符串中的不可见字符应该如何清除？</a>
+		</h1>
+		<div class="clear"></div>
+		<div class="postBody">
+			<div id="cnblogs_post_body" class="blogpost-body"><p>在我的工作中，经常要做数据的导入导出，包括在程序上和直接在数据库上操作。由于客户提供的数据千差万别，很可能包含大量特殊的不可见的字符，如果直接导入到数据库中，可能会导致应用程序出现问题，或者数据库查询时出现意想不到的结果。这时，需要在导入过程中，把这些“杂质”先过滤掉，再导入到数据库中。当然也可以在数据库中操作，这就视实际情况而定了。</p>
+<p>&nbsp;</p>
+<p>首先，如何在找到这些不可见的字符呢？用眼睛肯定是不行的，复制这些字符放到判断条件上？行不通。这时，ASCII（American Standard Code for Information Interchange），即美国标准信息交换代码帮上大忙。</p>
+<p>&nbsp;<img src="./ASCII码对应_files/212237471703734.jpg" alt=""></p>
+<p>（此图片来源于百度）</p>
+<p>&nbsp;</p>
+<p><img src="./ASCII码对应_files/212341479981706.jpg" alt=""></p>
+<p>&nbsp;</p>
+<p>计算机上所有字符都是在ASCII基础上进行扩展编码的，比如英文字符“A”的十进制编码是65，中文的“中”字的十进制编码是20013。关于ASCII编码，计算机字符集等知识，可上网或查阅相关资料，这里不再赘述。不过关于数据库的字符集，也是一个非常值得探讨的话题，在以后的文章中再与大家分享下自己的经验。</p>
+<p>&nbsp;</p>
+<p>从上面的图片ASCII码值表中得知，十进制的0至31和127这33个编码是不可见的特殊字符（控制符）。所以，只要想方法把这些字符替换掉即可。以下是我写的函数。如果您有更好的方法，请多多指教哈。</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./ASCII码对应_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #008080;"> 1</span> <span style="color: #0000ff;">IF</span> <span style="color: #ff00ff;">OBJECT_ID</span>(N<span style="color: #ff0000;">'</span><span style="color: #ff0000;">fn_trim_invisible_code</span><span style="color: #ff0000;">'</span>) <span style="color: #0000ff;">IS</span> <span style="color: #808080;">NOT</span> <span style="color: #0000ff;">NULL</span>
+<span style="color: #008080;"> 2</span> <span style="color: #0000ff;">BEGIN</span>
+<span style="color: #008080;"> 3</span>     <span style="color: #0000ff;">DROP</span> <span style="color: #0000ff;">FUNCTION</span><span style="color: #000000;"> fn_trim_invisible_code
+</span><span style="color: #008080;"> 4</span> <span style="color: #0000ff;">END</span>
+<span style="color: #008080;"> 5</span> <span style="color: #0000ff;">GO</span>
+<span style="color: #008080;"> 6</span> 
+<span style="color: #008080;"> 7</span> 
+<span style="color: #008080;"> 8</span> <span style="color: #008080;">/*</span><span style="color: #008080;">去掉字符串的不可见字符，包括去掉字符串两边的空格</span><span style="color: #008080;">*/</span>
+<span style="color: #008080;"> 9</span> <span style="color: #0000ff;">CREATE</span> <span style="color: #0000ff;">FUNCTION</span> fn_trim_invisible_code(<span style="color: #008000;">@str</span> <span style="color: #0000ff;">NVARCHAR</span>(<span style="color: #ff00ff;">MAX</span>)<span style="color: #808080;">=</span><span style="color: #ff0000;">''</span><span style="color: #000000;">)
+</span><span style="color: #008080;">10</span> <span style="color: #0000ff;">RETURNS</span> <span style="color: #0000ff;">NVARCHAR</span>(<span style="color: #ff00ff;">MAX</span><span style="color: #000000;">)
+</span><span style="color: #008080;">11</span> <span style="color: #0000ff;">AS</span>
+<span style="color: #008080;">12</span> <span style="color: #0000ff;">BEGIN</span>
+<span style="color: #008080;">13</span> <span style="color: #0000ff;">DECLARE</span> <span style="color: #008000;">@char</span> <span style="color: #0000ff;">NVARCHAR</span>(<span style="color: #ff00ff;">MAX</span><span style="color: #000000;">)
+</span><span style="color: #008080;">14</span> <span style="color: #0000ff;">DECLARE</span> <span style="color: #008000;">@i</span> <span style="color: #0000ff;">INT</span>
+<span style="color: #008080;">15</span> <span style="color: #0000ff;">SET</span> <span style="color: #008000;">@char</span> <span style="color: #808080;">=</span> <span style="color: #ff0000;">''</span> 
+<span style="color: #008080;">16</span> <span style="color: #0000ff;">SET</span> <span style="color: #008000;">@i</span> <span style="color: #808080;">=</span> <span style="color: #800000; font-weight: bold;">1</span>
+<span style="color: #008080;">17</span> 
+<span style="color: #008080;">18</span> <span style="color: #0000ff;">WHILE</span> <span style="color: #008000;">@i</span> <span style="color: #808080;">&lt;=</span> <span style="color: #ff00ff;">LEN</span>(<span style="color: #008000;">@str</span><span style="color: #000000;">)
+</span><span style="color: #008080;">19</span> <span style="color: #0000ff;">BEGIN</span>    
+<span style="color: #008080;">20</span>     <span style="color: #0000ff;">SET</span> <span style="color: #008000;">@char</span> <span style="color: #808080;">=</span> <span style="color: #008000;">@char</span> <span style="color: #808080;">+</span> <span style="color: #ff00ff;">CASE</span> <span style="color: #0000ff;">WHEN</span> <span style="color: #ff00ff;">UNICODE</span>(<span style="color: #ff00ff;">SUBSTRING</span>(<span style="color: #008000;">@str</span>,<span style="color: #008000;">@i</span>,<span style="color: #800000; font-weight: bold;">1</span>)) <span style="color: #808080;">&lt;=</span> <span style="color: #800000; font-weight: bold;">31</span> <span style="color: #808080;">OR</span> <span style="color: #ff00ff;">UNICODE</span>(<span style="color: #ff00ff;">SUBSTRING</span>(<span style="color: #008000;">@str</span>,<span style="color: #008000;">@i</span>,<span style="color: #800000; font-weight: bold;">1</span>)) <span style="color: #808080;">=</span> <span style="color: #800000; font-weight: bold;">127</span> 
+<span style="color: #008080;">21</span>                              <span style="color: #0000ff;">THEN</span> <span style="color: #ff0000;">''</span> 
+<span style="color: #008080;">22</span>                              <span style="color: #0000ff;">ELSE</span> <span style="color: #ff00ff;">SUBSTRING</span>(<span style="color: #008000;">@str</span>,<span style="color: #008000;">@i</span>,<span style="color: #800000; font-weight: bold;">1</span><span style="color: #000000;">) 
+</span><span style="color: #008080;">23</span>                         <span style="color: #0000ff;">END</span>
+<span style="color: #008080;">24</span>     <span style="color: #0000ff;">SET</span> <span style="color: #008000;">@i</span> <span style="color: #808080;">=</span> <span style="color: #008000;">@i</span> <span style="color: #808080;">+</span> <span style="color: #800000; font-weight: bold;">1</span>
+<span style="color: #008080;">25</span> <span style="color: #0000ff;">END</span>
+<span style="color: #008080;">26</span> <span style="color: #0000ff;">RETURN</span> <span style="color: #ff00ff;">RTRIM</span>(<span style="color: #ff00ff;">LTRIM</span>(<span style="color: #008000;">@char</span><span style="color: #000000;">))
+</span><span style="color: #008080;">27</span> <span style="color: #0000ff;">END</span></pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./ASCII码对应_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>-----------------经<a title="查看所回复的评论" href="http://www.cnblogs.com/fishparadise/p/4570654.html#3250986">@</a>剑走江湖 的提醒，重新修改了函数，减少substring使用次数，测试后性能有所提升。谢谢！------------- </p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./ASCII码对应_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #008080;"> 1</span> <span style="color: #0000ff;">IF</span> <span style="color: #ff00ff;">OBJECT_ID</span>(N<span style="color: #ff0000;">'</span><span style="color: #ff0000;">fn_trim_invisible_code</span><span style="color: #ff0000;">'</span>) <span style="color: #0000ff;">IS</span> <span style="color: #808080;">NOT</span> <span style="color: #0000ff;">NULL</span>
+<span style="color: #008080;"> 2</span> <span style="color: #0000ff;">BEGIN</span>
+<span style="color: #008080;"> 3</span>     <span style="color: #0000ff;">DROP</span> <span style="color: #0000ff;">FUNCTION</span><span style="color: #000000;"> fn_trim_invisible_code
+</span><span style="color: #008080;"> 4</span> <span style="color: #0000ff;">END</span>
+<span style="color: #008080;"> 5</span> <span style="color: #0000ff;">GO</span>
+<span style="color: #008080;"> 6</span> 
+<span style="color: #008080;"> 7</span> 
+<span style="color: #008080;"> 8</span> <span style="color: #008080;">/*</span><span style="color: #008080;">去掉字符串的不可见字符，包括去掉字符串两边的空格</span><span style="color: #008080;">*/</span>
+<span style="color: #008080;"> 9</span> <span style="color: #008080;">/*</span><span style="color: #008080;">如果字符串中间的空格也要去掉，把@ucode&lt;=31修改为&lt;=32即可</span><span style="color: #008080;">*/</span>
+<span style="color: #008080;">10</span> <span style="color: #0000ff;">CREATE</span> <span style="color: #0000ff;">FUNCTION</span> fn_trim_invisible_code(<span style="color: #008000;">@str</span> <span style="color: #0000ff;">NVARCHAR</span>(<span style="color: #ff00ff;">MAX</span>)<span style="color: #808080;">=</span><span style="color: #ff0000;">''</span><span style="color: #000000;">)
+</span><span style="color: #008080;">11</span> <span style="color: #0000ff;">RETURNS</span> <span style="color: #0000ff;">NVARCHAR</span>(<span style="color: #ff00ff;">MAX</span><span style="color: #000000;">)
+</span><span style="color: #008080;">12</span> <span style="color: #0000ff;">AS</span>
+<span style="color: #008080;">13</span> <span style="color: #0000ff;">BEGIN</span>
+<span style="color: #008080;">14</span> <span style="color: #0000ff;">DECLARE</span> <span style="color: #008000;">@char</span> <span style="color: #0000ff;">NVARCHAR</span>(<span style="color: #ff00ff;">MAX</span><span style="color: #000000;">)
+</span><span style="color: #008080;">15</span> <span style="color: #0000ff;">DECLARE</span> <span style="color: #008000;">@ucode</span> <span style="color: #0000ff;">INT</span>
+<span style="color: #008080;">16</span> <span style="color: #0000ff;">DECLARE</span> <span style="color: #008000;">@str2</span> <span style="color: #0000ff;">NVARCHAR</span>(<span style="color: #ff00ff;">MAX</span><span style="color: #000000;">)
+</span><span style="color: #008080;">17</span> <span style="color: #0000ff;">DECLARE</span> <span style="color: #008000;">@c</span> <span style="color: #0000ff;">NVARCHAR</span>(<span style="color: #800000; font-weight: bold;">1</span><span style="color: #000000;">)
+</span><span style="color: #008080;">18</span> <span style="color: #0000ff;">DECLARE</span> <span style="color: #008000;">@i</span> <span style="color: #0000ff;">INT</span>
+<span style="color: #008080;">19</span> <span style="color: #0000ff;">SET</span> <span style="color: #008000;">@char</span> <span style="color: #808080;">=</span> <span style="color: #ff0000;">''</span> 
+<span style="color: #008080;">20</span> <span style="color: #0000ff;">SET</span> <span style="color: #008000;">@str2</span> <span style="color: #808080;">=</span> <span style="color: #ff00ff;">RTRIM</span>(<span style="color: #ff00ff;">LTRIM</span>(<span style="color: #008000;">@str</span><span style="color: #000000;">))
+</span><span style="color: #008080;">21</span> <span style="color: #0000ff;">SET</span> <span style="color: #008000;">@i</span> <span style="color: #808080;">=</span> <span style="color: #800000; font-weight: bold;">1</span>
+<span style="color: #008080;">22</span> 
+<span style="color: #008080;">23</span> <span style="color: #0000ff;">WHILE</span> <span style="color: #008000;">@i</span> <span style="color: #808080;">&lt;=</span> <span style="color: #ff00ff;">LEN</span>(<span style="color: #008000;">@str2</span><span style="color: #000000;">)
+</span><span style="color: #008080;">24</span> <span style="color: #0000ff;">BEGIN</span>    
+<span style="color: #008080;">25</span>     <span style="color: #0000ff;">SET</span> <span style="color: #008000;">@c</span> <span style="color: #808080;">=</span> <span style="color: #ff00ff;">SUBSTRING</span>(<span style="color: #008000;">@str2</span>,<span style="color: #008000;">@i</span>,<span style="color: #800000; font-weight: bold;">1</span><span style="color: #000000;">)
+</span><span style="color: #008080;">26</span>     <span style="color: #0000ff;">SET</span> <span style="color: #008000;">@ucode</span> <span style="color: #808080;">=</span> <span style="color: #ff00ff;">UNICODE</span>(<span style="color: #008000;">@c</span><span style="color: #000000;">)   
+</span><span style="color: #008080;">27</span>     <span style="color: #0000ff;">SET</span> <span style="color: #008000;">@char</span> <span style="color: #808080;">=</span> <span style="color: #008000;">@char</span> <span style="color: #808080;">+</span> <span style="color: #ff00ff;">CASE</span> <span style="color: #0000ff;">WHEN</span> <span style="color: #008000;">@ucode</span> <span style="color: #808080;">&lt;=</span> <span style="color: #800000; font-weight: bold;">31</span> <span style="color: #808080;">OR</span> <span style="color: #008000;">@ucode</span> <span style="color: #808080;">=</span> <span style="color: #800000; font-weight: bold;">127</span> <span style="color: #0000ff;">THEN</span> <span style="color: #ff0000;">''</span> <span style="color: #0000ff;">ELSE</span> <span style="color: #008000;">@c</span> <span style="color: #0000ff;">END</span>
+<span style="color: #008080;">28</span>     <span style="color: #0000ff;">SET</span> <span style="color: #008000;">@i</span> <span style="color: #808080;">=</span> <span style="color: #008000;">@i</span> <span style="color: #808080;">+</span> <span style="color: #800000; font-weight: bold;">1</span>
+<span style="color: #008080;">29</span> <span style="color: #0000ff;">END</span>
+<span style="color: #008080;">30</span> 
+<span style="color: #008080;">31</span> <span style="color: #0000ff;">RETURN</span> (<span style="color: #008000;">@char</span><span style="color: #000000;">)
+</span><span style="color: #008080;">32</span> <span style="color: #0000ff;">END</span>
+<span style="color: #008080;">33</span> <span style="color: #0000ff;">GO</span></pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./ASCII码对应_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>&nbsp;</p></div><div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+<div id="BlogPostCategory"></div>
+<div id="EntryTag">标签: <a href="http://www.cnblogs.com/fishparadise/tag/sqlserver/">sqlserver</a>, <a href="http://www.cnblogs.com/fishparadise/tag/%E4%B8%8D%E5%8F%AF%E8%A7%81%E5%AD%97%E7%AC%A6/">不可见字符</a></div>
+<div id="blog_post_info"><div id="green_channel">
+        <a href="javascript:void(0);" id="green_channel_digg" onclick="DiggIt(4570654,cb_blogId,1);green_channel_success(this,&#39;谢谢推荐！&#39;);">好文要顶</a>
+            <a id="green_channel_follow" onclick="follow(&#39;81c4381e-cd0d-e511-b908-9dcfd8948a71&#39;);" href="javascript:void(0);">关注我</a>
+    <a id="green_channel_favorite" onclick="AddToWz(cb_entryId);return false;" href="javascript:void(0);">收藏该文</a>
+    <a id="green_channel_weibo" href="javascript:void(0);" title="分享至新浪微博" onclick="ShareToTsina()"><img src="./ASCII码对应_files/icon_weibo_24.png" alt=""></a>
+    <a id="green_channel_wechat" href="javascript:void(0);" title="分享至微信" onclick="shareOnWechat()"><img src="./ASCII码对应_files/wechat.png" alt=""></a>
+</div>
+<div id="author_profile">
+    <div id="author_profile_info" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/fishparadise/" target="_blank"><img src="./ASCII码对应_files/20150609145106.png" class="author_avatar" alt=""></a>
+        <div id="author_profile_detail" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/fishparadise/">FishParadise</a><br>
+            <a href="http://home.cnblogs.com/u/fishparadise/followees">关注 - 63</a><br>
+            <a href="http://home.cnblogs.com/u/fishparadise/followers">粉丝 - 33</a>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div id="author_profile_honor"></div>
+    <div id="author_profile_follow">
+                <a href="javascript:void(0);" onclick="follow(&#39;81c4381e-cd0d-e511-b908-9dcfd8948a71&#39;);return false;">+加关注</a>
+    </div>
+</div>
+<div id="div_digg">
+    <div class="diggit" onclick="votePost(4570654,&#39;Digg&#39;)">
+        <span class="diggnum" id="digg_count">1</span>
+    </div>
+    <div class="buryit" onclick="votePost(4570654,&#39;Bury&#39;)">
+        <span class="burynum" id="bury_count">0</span>
+    </div>
+    <div class="clear"></div>
+    <div class="diggword" id="digg_tips">
+    </div>
+</div>
+<script type="text/javascript">
+    currentDiggType = 0;
+</script></div>
+<div class="clear"></div>
+<div id="post_next_prev"><a href="http://www.cnblogs.com/fishparadise/p/4576964.html" class="p_n_p_prefix">« </a> 上一篇：<a href="http://www.cnblogs.com/fishparadise/p/4576964.html" title="发布于2015-06-16 23:32">字符/字段数据的合并</a><br><a href="http://www.cnblogs.com/fishparadise/p/4693488.html" class="p_n_p_prefix">» </a> 下一篇：<a href="http://www.cnblogs.com/fishparadise/p/4693488.html" title="发布于2015-08-10 20:54">安装SQL SERVER 2016 CTP （一）[多图]</a><br></div>
+</div>
+
+
+		</div>
+		<div class="postDesc">posted @ <span id="post-date">2015-06-22 00:02</span> <a href="http://www.cnblogs.com/fishparadise/">FishParadise</a> 阅读(<span id="post_view_count">6342</span>) 评论(<span id="post_comment_count">6</span>)  <a href="https://i.cnblogs.com/EditPosts.aspx?postid=4570654" rel="nofollow">编辑</a> <a href="https://www.cnblogs.com/fishparadise/p/4570654.html#" onclick="AddToWz(4570654);return false;">收藏</a></div>
+	</div>
+	<script type="text/javascript">var allowComments=true,cb_blogId=231045,cb_entryId=4570654,cb_blogApp=currentBlogApp,cb_blogUserGuid='81c4381e-cd0d-e511-b908-9dcfd8948a71',cb_entryCreatedDate='2015/6/22 0:02:00';loadViewCount(cb_entryId);var cb_postType=1;</script>
+	
+</div><!--end: topics 文章、评论容器-->
+</div><a name="!comments"></a><div id="blog-comments-placeholder"><div id="comments_pager_top"></div>
+<br>
+<div class="feedback_area_title">评论列表</div>
+<div class="feedbackNoItems"></div>	
+
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="https://www.cnblogs.com/fishparadise/p/4570654.html#3250986" class="layer">#1楼</a><a name="3250986" id="comment_anchor_3250986"></a>  <span class="comment_date">2015-08-20 16:21</span> <a id="a_comment_author_3250986" href="http://www.cnblogs.com/dzy863/" target="_blank">剑走江湖</a> <a href="http://msg.cnblogs.com/send/%E5%89%91%E8%B5%B0%E6%B1%9F%E6%B9%96" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3250986" class="blog_comment_body">获取字符串子串函数substring使用了三次，可以有为使用一次。</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3250986,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3250986,&#39;Bury&#39;,this)">反对(0)</a></div>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="https://www.cnblogs.com/fishparadise/p/4570654.html#3252481" class="layer">#2楼</a><a name="3252481" id="comment_anchor_3252481"></a>[<span class="louzhu">楼主</span>]  <span class="comment_date">2015-08-22 23:19</span> <a id="a_comment_author_3252481" href="http://www.cnblogs.com/fishparadise/" target="_blank">FishParadise</a> <a href="http://msg.cnblogs.com/send/FishParadise" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3252481" class="blog_comment_body"><a href="https://www.cnblogs.com/fishparadise/p/4570654.html#3250986" title="查看所回复的评论" onclick="commentManager.renderComments(0,50,3250986);">@</a>
+剑走江湖<br>谢谢指点。已经修改为substring一次，测试发现性能有提升。谢谢！</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3252481,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3252481,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3252481_avatar" style="display:none;">http://pic.cnblogs.com/face/772143/20150609145106.png</span>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="https://www.cnblogs.com/fishparadise/p/4570654.html#3280626" class="layer">#3楼</a><a name="3280626" id="comment_anchor_3280626"></a>  <span class="comment_date">2015-10-09 09:47</span> <a id="a_comment_author_3280626" href="http://www.cnblogs.com/chhuang/" target="_blank">阿传说</a> <a href="http://msg.cnblogs.com/send/%E9%98%BF%E4%BC%A0%E8%AF%B4" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3280626" class="blog_comment_body">支持，挺实用，日常确实有这个问题，已收藏感谢</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3280626,&#39;Digg&#39;,this)">支持(1)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3280626,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3280626_avatar" style="display:none;">http://pic.cnblogs.com/face/493179/20140209183918.png</span>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="https://www.cnblogs.com/fishparadise/p/4570654.html#3280629" class="layer">#4楼</a><a name="3280629" id="comment_anchor_3280629"></a>[<span class="louzhu">楼主</span>]  <span class="comment_date">2015-10-09 09:49</span> <a id="a_comment_author_3280629" href="http://www.cnblogs.com/fishparadise/" target="_blank">FishParadise</a> <a href="http://msg.cnblogs.com/send/FishParadise" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3280629" class="blog_comment_body"><a href="https://www.cnblogs.com/fishparadise/p/4570654.html#3280626" title="查看所回复的评论" onclick="commentManager.renderComments(0,50,3280626);">@</a>
+阿传说<br>多谢支持哈。</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3280629,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3280629,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3280629_avatar" style="display:none;">http://pic.cnblogs.com/face/772143/20150609145106.png</span>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="https://www.cnblogs.com/fishparadise/p/4570654.html#3290089" class="layer">#5楼</a><a name="3290089" id="comment_anchor_3290089"></a>  <span class="comment_date">2015-10-22 18:06</span> <a id="a_comment_author_3290089" href="http://www.cnblogs.com/TeyGao/" target="_blank">笑东风</a> <a href="http://msg.cnblogs.com/send/%E7%AC%91%E4%B8%9C%E9%A3%8E" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3290089" class="blog_comment_body">还有很多中文字符也会“不可见”</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3290089,&#39;Digg&#39;,this)">支持(1)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3290089,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3290089_avatar" style="display:none;">http://pic.cnblogs.com/face/174228/20140113231352.png</span>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="https://www.cnblogs.com/fishparadise/p/4570654.html#3306106" class="layer">#6楼</a><a name="3306106" id="comment_anchor_3306106"></a><span id="comment-maxId" style="display:none;">3306106</span><span id="comment-maxDate" style="display:none;">2015/11/13 18:04:49</span>  <span class="comment_date">2015-11-13 18:04</span> <a id="a_comment_author_3306106" href="http://www.cnblogs.com/lyhabc/" target="_blank">桦仔</a> <a href="http://msg.cnblogs.com/send/%E6%A1%A6%E4%BB%94" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3306106" class="blog_comment_body">确实不错</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3306106,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3306106,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3306106_avatar" style="display:none;">http://pic.cnblogs.com/face/257159/20151110124424.png</span>
+			</div>
+		</div>
+	<div id="comments_pager_bottom"></div></div><script type="text/javascript">var commentManager = new blogCommentManager();commentManager.renderComments(0);</script>
+<div id="comment_form" class="commentform">
+<a name="commentform"></a>
+<div id="divCommentShow"></div>
+<div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="https://www.cnblogs.com/fishparadise/p/4570654.html#" onclick="return RefreshPage();">刷新页面</a><a href="https://www.cnblogs.com/fishparadise/p/4570654.html#top">返回顶部</a></div>
+<div id="comment_form_container"><div class="login_tips">注册用户登录后才能发表评论，请 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return login(&#39;commentform&#39;);">登录</a> 或 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return register();">注册</a>，<a href="http://www.cnblogs.com/">访问</a>网站首页。</div></div>
+<div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+<div id="ad_t2"><a href="http://www.ucancode.com/index.htm" target="_blank">【推荐】超50万VC++源码: 大型工控、组态\仿真、建模CAD源码2018！</a><br><a href="https://cloud.tencent.com/act/first_purchase?fromSource=gwzcw.741257.741257.741257" target="_blank">【推荐】腾讯云如何购买服务器更划算？</a><br></div>
+<div id="opt_under_post"></div>
+<div id="cnblogs_c1" class="c_ad_block"><a href="https://ke.qq.com/next/index.html?from=176158" target="_blank"><img width="300" height="250" src="./ASCII码对应_files/24442-20180108123632644-2119592979.png" alt="ke0108"></a></div>
+<div id="under_post_news"><div class="itnews c_ad_block"><b>最新IT新闻</b>:<br> ·  <a href="https://news.cnblogs.com/n/587387/" target="_blank">推公众号App 微信补课内容端</a><br> ·  <a href="https://news.cnblogs.com/n/587385/" target="_blank">GDCA根证书入Mozilla证书库</a><br> ·  <a href="https://news.cnblogs.com/n/587386/" target="_blank">苏宁再改名突出智慧零售主业 发力零售下半场竞争</a><br> ·  <a href="https://news.cnblogs.com/n/587384/" target="_blank">京东京造悄然上线 网易严选又多了一个劲敌</a><br> ·  <a href="https://news.cnblogs.com/n/587383/" target="_blank">苹果更新官网首页 纪念民权领袖马丁·路德·金</a><br>» <a href="http://news.cnblogs.com/" title="IT新闻" target="_blank">更多新闻...</a></div></div>
+<div id="cnblogs_c2" class="c_ad_block"><a href="http://click.aliyun.com/m/34770/" target="_blank"><img width="468" height="60" src="./ASCII码对应_files/24442-20171208101900738-116140477.jpg" alt="阿里云C2-1208"></a></div>
+<div id="under_post_kb"><div class="itnews c_ad_block" id="kb_block"><b>最新知识库文章</b>:<br><div id="kb_recent"> ·  <a href="http://kb.cnblogs.com/page/585502/" target="_blank">步入云计算</a><br> ·  <a href="http://kb.cnblogs.com/page/531409/" target="_blank">以操作系统的角度述说线程与进程</a><br> ·  <a href="http://kb.cnblogs.com/page/141729/" target="_blank">软件测试转型之路</a><br> ·  <a href="http://kb.cnblogs.com/page/177402/" target="_blank">门内门外看招聘</a><br> ·  <a href="http://kb.cnblogs.com/page/112506/" target="_blank">大道至简，职场上做人做事做管理</a><br></div>» <a href="http://kb.cnblogs.com/" target="_blank">更多知识库文章...</a></div></div>
+<div id="HistoryToday" class="c_ad_block"></div>
+<script type="text/javascript">
+    fixPostBody();
+    setTimeout(function () { incrementViewCount(cb_entryId); }, 50);
+    deliverAdT2();
+    deliverAdC1();
+    deliverAdC2();    
+    loadNewsAndKb();
+    loadBlogSignature();
+    LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+    GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+    loadOptUnderPost();
+    GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);   
+</script>
+</div>
+
+
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<!--done-->
+<div class="newsItem">
+<h3 class="catListTitle">公告</h3>
+	<div id="blog-news"><div id="profile_block">昵称：<a href="https://home.cnblogs.com/u/fishparadise/">FishParadise</a><br>园龄：<a href="https://home.cnblogs.com/u/fishparadise/" title="入园时间：2015-06-08">2年7个月</a><br>粉丝：<a href="https://home.cnblogs.com/u/fishparadise/followers/">33</a><br>关注：<a href="https://home.cnblogs.com/u/fishparadise/followees/">63</a><div id="p_b_follow"><a href="javascript:void(0);" onclick="follow(&#39;81c4381e-cd0d-e511-b908-9dcfd8948a71&#39;)">+加关注</a></div><script>getFollowStatus('81c4381e-cd0d-e511-b908-9dcfd8948a71')</script></div></div><script type="text/javascript">loadBlogNews();</script>
+</div>
+
+			<div id="blog-calendar" style=""><table id="blogCalendar" class="Cal" cellspacing="0" cellpadding="0" title="Calendar">
+	<tbody><tr><td colspan="7"><table class="CalTitle" cellspacing="0">
+		<tbody><tr><td class="CalNextPrev"><a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2017/12/01&#39;);return false;">&lt;</a></td><td align="center">2018年1月</td><td class="CalNextPrev" align="right"><a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2018/02/01&#39;);return false;">&gt;</a></td></tr>
+	</tbody></table></td></tr><tr><th class="CalDayHeader" align="center" abbr="日" scope="col">日</th><th class="CalDayHeader" align="center" abbr="一" scope="col">一</th><th class="CalDayHeader" align="center" abbr="二" scope="col">二</th><th class="CalDayHeader" align="center" abbr="三" scope="col">三</th><th class="CalDayHeader" align="center" abbr="四" scope="col">四</th><th class="CalDayHeader" align="center" abbr="五" scope="col">五</th><th class="CalDayHeader" align="center" abbr="六" scope="col">六</th></tr><tr><td class="CalOtherMonthDay" align="center">31</td><td align="center">1</td><td align="center">2</td><td align="center">3</td><td align="center">4</td><td align="center">5</td><td class="CalWeekendDay" align="center">6</td></tr><tr><td class="CalWeekendDay" align="center">7</td><td align="center">8</td><td align="center">9</td><td align="center">10</td><td align="center">11</td><td align="center">12</td><td class="CalWeekendDay" align="center">13</td></tr><tr><td class="CalWeekendDay" align="center">14</td><td align="center">15</td><td class="CalTodayDay" align="center">16</td><td align="center">17</td><td align="center">18</td><td align="center">19</td><td class="CalWeekendDay" align="center">20</td></tr><tr><td class="CalWeekendDay" align="center">21</td><td align="center">22</td><td align="center">23</td><td align="center">24</td><td align="center">25</td><td align="center">26</td><td class="CalWeekendDay" align="center">27</td></tr><tr><td class="CalWeekendDay" align="center">28</td><td align="center">29</td><td align="center">30</td><td align="center">31</td><td class="CalOtherMonthDay" align="center">1</td><td class="CalOtherMonthDay" align="center">2</td><td class="CalOtherMonthDay" align="center">3</td></tr><tr><td class="CalOtherMonthDay" align="center">4</td><td class="CalOtherMonthDay" align="center">5</td><td class="CalOtherMonthDay" align="center">6</td><td class="CalOtherMonthDay" align="center">7</td><td class="CalOtherMonthDay" align="center">8</td><td class="CalOtherMonthDay" align="center">9</td><td class="CalOtherMonthDay" align="center">10</td></tr>
+</tbody></table></div><script type="text/javascript">loadBlogDefaultCalendar();</script>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"><div id="sidebar_search" class="sidebar-block">
+<div id="sidebar_search" class="mySearch">
+<h3 class="catListTitle">搜索</h3>
+<div id="sidebar_search_box">
+<div id="widget_my_zzk" class="div_my_zzk"><input type="text" id="q" onkeydown="return zzk_go_enter(event);" class="input_my_zzk">&nbsp;<input onclick="zzk_go()" type="button" value="找找看" id="btnZzk" class="btn_my_zzk"></div>
+<div id="widget_my_google" class="div_my_zzk"><input type="text" name="google_q" id="google_q" onkeydown="return google_go_enter(event)" class="input_my_zzk">&nbsp;<input onclick="google_go()" type="button" value="谷歌搜索" class="btn_my_zzk"></div>
+</div>
+</div>
+
+</div><div id="sidebar_shortcut" class="sidebar-block">
+<div class="catListLink">
+<h3 class="catListTitle">常用链接</h3>
+<ul>
+<li><a href="http://www.cnblogs.com/fishparadise/p/" title="我的博客的随笔列表">我的随笔</a></li><li><a href="http://www.cnblogs.com/fishparadise/MyComments.html" title="我发表过的评论列表">我的评论</a></li><li><a href="http://www.cnblogs.com/fishparadise/OtherPosts.html" title="我评论过的随笔列表">我的参与</a></li><li><a href="http://www.cnblogs.com/fishparadise/RecentComments.html" title="我的博客的评论列表">最新评论</a></li><li><a href="http://www.cnblogs.com/fishparadise/tag/" title="我的博客的标签列表">我的标签</a></li>
+</ul>
+<div id="itemListLin_con" style="display:none;">
+<ul>
+
+</ul>
+</div>
+</div></div><div id="sidebar_toptags" class="sidebar-block">
+<div class="catListTag">
+<h3 class="catListTitle">我的标签</h3>
+<ul>
+<li><a href="http://www.cnblogs.com/fishparadise/tag/sqlserver/">sqlserver</a>(25)</li><li><a href="http://www.cnblogs.com/fishparadise/tag/%E5%AE%89%E8%A3%85/">安装</a>(7)</li><li><a href="http://www.cnblogs.com/fishparadise/tag/sqlserver2017/">sqlserver2017</a>(5)</li><li><a href="http://www.cnblogs.com/fishparadise/tag/Linux/">Linux</a>(5)</li><li><a href="http://www.cnblogs.com/fishparadise/tag/SQL%202016/">SQL 2016</a>(4)</li><li><a href="http://www.cnblogs.com/fishparadise/tag/%E7%AE%A1%E7%90%86%E4%B8%8E%E8%BF%90%E7%BB%B4/">管理与运维</a>(2)</li><li><a href="http://www.cnblogs.com/fishparadise/tag/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%88%86%E5%89%B2/">字符串分割</a>(2)</li><li><a href="http://www.cnblogs.com/fishparadise/tag/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a>(2)</li><li><a href="http://www.cnblogs.com/fishparadise/tag/%E8%AE%A1%E7%AE%97%E5%88%97/">计算列</a>(1)</li><li><a href="http://www.cnblogs.com/fishparadise/tag/%E8%BF%9B%E5%88%B6%E8%BD%AC%E6%8D%A2/">进制转换</a>(1)</li><li><a href="http://www.cnblogs.com/fishparadise/tag/">更多</a></li>
+</ul>
+</div></div><div id="sidebar_categories">
+<div id="sidebar_postarchive" class="catListPostArchive sidebar-block">
+<h3 class="catListTitle">随笔档案</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_0_Link_0" href="http://www.cnblogs.com/fishparadise/archive/2017/12.html">2017年12月 (6)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_1" href="http://www.cnblogs.com/fishparadise/archive/2017/01.html">2017年1月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_2" href="http://www.cnblogs.com/fishparadise/archive/2016/07.html">2016年7月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_3" href="http://www.cnblogs.com/fishparadise/archive/2016/04.html">2016年4月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_4" href="http://www.cnblogs.com/fishparadise/archive/2016/03.html">2016年3月 (3)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_5" href="http://www.cnblogs.com/fishparadise/archive/2016/02.html">2016年2月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_6" href="http://www.cnblogs.com/fishparadise/archive/2016/01.html">2016年1月 (5)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_7" href="http://www.cnblogs.com/fishparadise/archive/2015/09.html">2015年9月 (3)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_8" href="http://www.cnblogs.com/fishparadise/archive/2015/08.html">2015年8月 (6)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_9" href="http://www.cnblogs.com/fishparadise/archive/2015/06.html">2015年6月 (4)</a> </li>
+
+</ul>
+
+</div>
+
+<div id="sidebar_links724123" class="catList sidebar-block">
+<h3 class="catListTitle">技术博客&amp;大牛们</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_1_Link_0" href="http://www.apexsql.com/" rel="nofollow" target="_blank">ApexSQL</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_1" href="http://www.cnblogs.com/biwork/" rel="nofollow" target="_blank">BIWORK</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_2" href="http://www.codeproject.com/" rel="nofollow" target="_blank">CODE PROJECT</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_3" href="http://www.codeplex.com/" rel="nofollow" target="_blank">CodePlex</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_4" href="http://www.eygle.com/" rel="nofollow" target="_blank">Eygle</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_5" href="http://tsql.solidq.com/" rel="nofollow" target="_blank">Itzik Ben-Gan's Web Site</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_6" href="http://zh.lucida.me/" rel="nofollow" target="_blank">Lucida</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_7" href="http://blog.csdn.net/fredrickhu/" rel="nofollow" target="_blank">MVP fredrickhu</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_8" href="http://www.cnblogs.com/Joe-T/" rel="nofollow" target="_blank">MVP Joe.TJ</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_9" href="http://www.cnblogs.com/shanksgao/" rel="nofollow" target="_blank">MVP ShanksGao</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_10" href="http://blog.5dmail.net/" rel="nofollow" target="_blank">MVP 丁国茂</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_11" href="http://www.cnblogs.com/lyhabc/" rel="nofollow" target="_blank">MVP 桦仔</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_12" href="http://blog.csdn.net/DBA_Huangzj/" rel="nofollow" target="_blank">MVP 黄钊吉</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_13" href="http://vmcloud.info/" rel="nofollow" target="_blank">MVP 李斯达</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_14" href="http://jimshu.blog.51cto.com/" rel="nofollow" target="_blank">MVP 舒永春</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_15" href="http://www.cnblogs.com/CareySon/" rel="nofollow" target="_blank">MVP 宋沄剑</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_16" href="http://www.cnblogs.com/gaizai/" rel="nofollow" target="_blank">MVP 听风吹雨</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_17" href="http://blog.csdn.net/roy_88" rel="nofollow" target="_blank">MVP 吴熹</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_18" href="http://ultrasql.blog.51cto.com/" rel="nofollow" target="_blank">MVP 许昌永</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_19" href="http://www.cnblogs.com/downmoon/" rel="nofollow" target="_blank">MVP 邀月工作室</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_20" href="http://www.ningoo.net/" rel="nofollow" target="_blank">Ningoo</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_21" href="http://www.cnblogs.com/SignalTips/" rel="nofollow" target="_blank">SignalTips</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_22" href="https://www.simple-talk.com/" rel="nofollow" target="_blank">simple talk</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_23" href="http://www.sqlscripter.com/" rel="nofollow" target="_blank">SQL Scripter</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_24" href="https://msdn.microsoft.com/en-us/library/bb545450.aspx" rel="nofollow" target="_blank">SQL SERVER Documentation</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_25" href="http://blogs.msdn.com/b/sqlreleaseservices/" rel="nofollow" target="_blank">SQL SERVER 官方博客</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_26" href="http://www.sqlservercentral.com/" rel="nofollow" target="_blank">SQL Servercentral</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_27" href="http://sqlblog.com/" rel="nofollow" target="_blank">sqlblog.com</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_28" href="http://blogs.msdn.com/b/sqlcrd/" rel="nofollow" target="_blank">SQL中国研发中心</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_29" href="https://technet.microsoft.com/zh-cn/evalcenter/" rel="nofollow" target="_blank">TechNet Evaluation Center</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_30" href="http://www.ahalei.com/" rel="nofollow" target="_blank">啊哈磊</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_31" href="http://blog.csdn.net/v_july_v" rel="nofollow" target="_blank">结构之法 算法之道</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_32" href="https://github.com/justjavac/free-programming-books-zh_CN" rel="nofollow" target="_blank">免费的编程中文书籍索引</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_33" href="http://www.julyedu.com/" rel="nofollow" target="_blank">七月算法</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_34" href="http://www.cnblogs.com/kerrycode/" rel="nofollow" target="_blank">潇湘隐者</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_35" href="http://www.cnblogs.com/diabloxl/" rel="nofollow" target="_blank">肖总</a> </li>
+
+</ul>
+
+</div>
+
+</div><div id="sidebar_recentcomments" class="sidebar-block"><div id="recent_comments_wrap">
+<div class="catListComment">
+<h3 class="catListTitle">最新评论</h3>
+
+	<div id="RecentCommentsBlock"><ul>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/fishparadise/p/8057650.html#3876444">1. Re:CentOS7脱机安装SQL Server 2017</a></li>
+        <li class="recent_comment_body">为什么我安装的没有？</li>
+        <li class="recent_comment_author">--jame2017</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/fishparadise/p/8057650.html#3876260">2. Re:CentOS7脱机安装SQL Server 2017</a></li>
+        <li class="recent_comment_body">@jame2017引用服务器属性没有安全属性选项？有。...</li>
+        <li class="recent_comment_author">--FishParadise</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/fishparadise/p/8057650.html#3876159">3. Re:CentOS7脱机安装SQL Server 2017</a></li>
+        <li class="recent_comment_body">服务器属性没有安全属性选项？</li>
+        <li class="recent_comment_author">--jame2017</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/fishparadise/p/8058085.html#3876157">4. Re:从Windows迁移SQL Server到Linux</a></li>
+        <li class="recent_comment_body">服务器属性没有安全属性选项？</li>
+        <li class="recent_comment_author">--jame2017</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/fishparadise/p/8125203.html#3875916">5. Re:配置SQL Server on Linux（1）</a></li>
+        <li class="recent_comment_body">@jame2017引用我把金蝶K3数据库迁移过来，发现无法使用，你有接触过金蝶K3吗我没有使用过K3，但我了解这类的系统。先确认连接，SSMS是否正常使用。如果是系统无法使用，还跟系统的连接数据库配置......</li>
+        <li class="recent_comment_author">--FishParadise</li>
+</ul>
+</div>
+</div>
+</div></div><div id="sidebar_topviewedposts" class="sidebar-block"><div id="topview_posts_wrap">
+<div class="catListView">
+<h3 class="catListTitle">阅读排行榜</h3>
+	<div id="TopViewPostsBlock"><ul><li><a href="http://www.cnblogs.com/fishparadise/p/5655570.html">1. SQL Server 2016正式版安装（超多图）(50878)</a></li><li><a href="http://www.cnblogs.com/fishparadise/p/5295377.html">2. SQL Server启动的几种方法(20879)</a></li><li><a href="http://www.cnblogs.com/fishparadise/p/4592789.html">3. SQL SERVER几种数据迁移/导出导入的实践(19399)</a></li><li><a href="http://www.cnblogs.com/fishparadise/p/4570654.html">4. 字符串中的不可见字符应该如何清除？(6341)</a></li><li><a href="http://www.cnblogs.com/fishparadise/p/4809014.html">5. BCP导出导入大容量数据实践(3128)</a></li></ul></div>
+</div>
+</div></div><div id="sidebar_topcommentedposts" class="sidebar-block"><div id="topfeedback_posts_wrap">
+<div class="catListFeedback">
+<h3 class="catListTitle">评论排行榜</h3>
+	<div id="TopFeedbackPostsBlock"><ul><li><a href="http://www.cnblogs.com/fishparadise/p/8057650.html">1. CentOS7脱机安装SQL Server 2017(12)</a></li><li><a href="http://www.cnblogs.com/fishparadise/p/4693488.html">2. 安装SQL SERVER 2016 CTP （一）[多图](11)</a></li><li><a href="http://www.cnblogs.com/fishparadise/p/5655570.html">3. SQL Server 2016正式版安装（超多图）(8)</a></li><li><a href="http://www.cnblogs.com/fishparadise/p/4809014.html">4. BCP导出导入大容量数据实践(6)</a></li><li><a href="http://www.cnblogs.com/fishparadise/p/4570654.html">5. 字符串中的不可见字符应该如何清除？(6)</a></li></ul></div>
+</div>
+</div></div><div id="sidebar_topdiggedposts" class="sidebar-block"><div id="topdigg_posts_wrap">
+<div class="catListView">
+<h3 class="catListTitle">推荐排行榜</h3>
+<div id="TopDiggPostsBlock"><ul><li><a href="http://www.cnblogs.com/fishparadise/p/4809014.html">1. BCP导出导入大容量数据实践(5)</a></li><li><a href="http://www.cnblogs.com/fishparadise/p/5655570.html">2. SQL Server 2016正式版安装（超多图）(5)</a></li><li><a href="http://www.cnblogs.com/fishparadise/p/5288594.html">3. SQL Server 2016 RC0 安装（超多图）(3)</a></li><li><a href="http://www.cnblogs.com/fishparadise/p/8057650.html">4. CentOS7脱机安装SQL Server 2017(2)</a></li><li><a href="http://www.cnblogs.com/fishparadise/p/5106787.html">5. 快速对表的某字段赋递增的数值(2)</a></li></ul></div>
+</div></div></div></div><script type="text/javascript">loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		
+<!--done-->
+Copyright ©2018 FishParadise
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+</body></html>
